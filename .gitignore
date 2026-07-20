@@ -1,0 +1,18 @@
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*~
+
+# Logs / temp
+*.log
+node_modules/
+.cache/
+
+# Internal strategy — keep private, do NOT publish
+PLANIFICACION.md

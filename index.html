@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Generador y optimizador de citas académicas gratis. Pega un DOI, ISBN, URL o título y obtén tu cita en APA 7, MLA, Chicago, IEEE, Vancouver o ABNT al instante. Sin registro.">
+  <meta name="theme-color" content="#4f46e5">
+  <title>CiteFast — Generador de Citas Académicas (APA, MLA, IEEE, Vancouver, ABNT)</title>
+
+  <!-- Preconexión a las APIs para reducir latencia del autocompletado -->
+  <link rel="preconnect" href="https://doi.org" crossorigin>
+  <link rel="preconnect" href="https://api.crossref.org" crossorigin>
+  <link rel="preconnect" href="https://api.openalex.org" crossorigin>
+  <link rel="dns-prefetch" href="https://www.googleapis.com">
+
+  <link rel="stylesheet" href="assets/css/styles.css">
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       GOOGLE ADSENSE — pega aquí tu script del sitio (una sola vez).
+       Reemplaza ca-pub-XXXXXXXXXXXXXXXX por tu ID de editor.
+       Descomenta cuando tengas la cuenta aprobada:
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+       ═══════════════════════════════════════════════════════════════════ -->
+</head>
+<body>
+  <!-- ░░░ HEADER ░░░ -->
+  <header class="topbar">
+    <div class="wrap topbar__inner">
+      <a class="brand" href="/">
+        <span class="brand__mark" aria-hidden="true">❝</span>
+        <span class="brand__name">Cite<b>Fast</b></span>
+      </a>
+      <div class="topbar__controls">
+        <label class="select">
+          <span class="select__label" data-i18n="langLabel">Idioma</span>
+          <select id="langSelect" aria-label="Language"></select>
+        </label>
+        <label class="select">
+          <span class="select__label" data-i18n="styleLabel">Estilo</span>
+          <select id="styleSelect" aria-label="Citation style"></select>
+        </label>
+        <button id="themeToggle" class="icon-btn icon-btn--ghost" data-i18n-title="themeTitle" title="Tema" aria-label="Theme">◐</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap main">
+    <!-- ░░░ HERO ░░░ -->
+    <section class="hero">
+      <h1 class="hero__title" id="heroTitle">Tu cita perfecta en <span>3 segundos</span></h1>
+      <p class="hero__sub" id="heroSub" data-i18n="heroSub"></p>
+
+      <div class="searchbox">
+        <input id="heroInput" class="searchbox__input" type="text" autocomplete="off" spellcheck="false"
+          data-i18n-ph="searchPlaceholder" placeholder="Pega un DOI, ISBN, URL o título…" aria-label="Source data">
+        <button id="clearInput" class="searchbox__clear" data-i18n-title="clearTitle" title="Limpiar" aria-label="Clear">✕</button>
+      </div>
+
+      <div class="hero__meta">
+        <span id="typeChip" class="chip" hidden></span>
+        <span id="status" class="status status--idle"></span>
+      </div>
+
+      <!-- Candidatos (desambiguación) -->
+      <div id="candidates" class="candidates" hidden></div>
+
+      <!-- Entrada manual -->
+      <div class="manual">
+        <button id="manualToggle" class="manual__toggle" aria-expanded="false" aria-controls="manualBody">
+          <span data-i18n="manualToggle">o rellena los datos manualmente</span> <span class="manual__chevron">▾</span>
+        </button>
+        <div id="manualBody" class="manual__body" hidden>
+          <label class="field field--wide">
+            <span data-i18n="manualTypeLabel">Tipo de documento</span>
+            <select id="manualType"></select>
+          </label>
+          <div id="manualFields" class="manual__grid"></div>
+          <button id="manualBuild" class="btn btn--primary" data-i18n="manualBuild">Generar cita</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░░ VISTA PREVIA ░░░ -->
+    <section id="previewCard" class="preview is-empty" aria-live="polite">
+      <div class="preview__head">
+        <h2 data-i18n="previewHead">Vista previa</h2>
+        <span class="preview__style" id="previewStyleTag"></span>
+      </div>
+      <div id="previewText" class="preview__text"></div>
+      <div id="previewWarnings" class="preview__warnings" hidden></div>
+      <div id="previewActions" class="preview__actions" hidden>
+        <button class="btn btn--primary" data-act="copy" data-i18n="actCopy">Copiar con formato</button>
+        <button class="btn" data-act="copytext" data-i18n="actCopyText">Copiar texto</button>
+        <button class="btn" data-act="bibtex">BibTeX</button>
+        <button class="btn" data-act="ris">RIS</button>
+        <button class="btn" data-act="edit" data-i18n="actEdit">Editar</button>
+        <button class="btn btn--accent" data-act="add" data-i18n="actAdd">Añadir a mi biblioteca</button>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SLOT DE ANUNCIO 1 — bloque in-content (bajo el pliegue funcional).
+         Discreto, con espacio reservado para NO causar saltos de diseño (CLS=0).
+         Sustituye data-ad-slot por tu slot real y descomenta el <ins>.
+         ═══════════════════════════════════════════════════════════════ -->
+    <aside class="ad ad--inline" aria-label="Publicidad">
+      <span class="ad__tag">Ad</span>
+      <div class="ad__box">
+        <!--
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+             data-ad-slot="0000000000"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        -->
+      </div>
+    </aside>
+
+    <!-- ░░░ BIBLIOTECA ░░░ -->
+    <section class="lib">
+      <div class="lib__head">
+        <h2><span data-i18n="libHead">Mi biblioteca</span> <span class="lib__count">(<span id="libCount">0</span>)</span></h2>
+        <div id="libraryTools" class="lib__tools" hidden>
+          <label class="select select--sm">
+            <span class="select__label" data-i18n="exportLabel">Exportar todo</span>
+            <select id="exportAll" aria-label="Export library"></select>
+          </label>
+          <button id="clearLibrary" class="btn btn--ghost btn--sm" data-i18n="clearLib">Vaciar</button>
+        </div>
+      </div>
+      <p id="libraryEmpty" class="lib__empty" data-i18n="libEmpty"></p>
+      <ol id="library" class="lib__list"></ol>
+    </section>
+
+    <!-- ░░░ FAQ + GUÍA DE ESTILOS ░░░ -->
+    <section class="faq">
+      <h2 class="faq__head" id="styleGuideHead" data-i18n="styleGuideHead">¿Qué estilo debo usar?</h2>
+      <p class="faq__intro" id="styleGuideIntro" data-i18n="styleGuideIntro"></p>
+      <div class="styleguide" id="styleGuideTable"></div>
+      <p class="faq__tip" id="styleGuideTip" data-i18n="styleGuideTip"></p>
+
+      <h2 class="faq__head" data-i18n="faqHead">Preguntas frecuentes</h2>
+      <div id="faqList" class="faq__list"></div>
+    </section>
+  </main>
+
+  <!-- ░░░ FOOTER ░░░ -->
+  <footer class="footer">
+    <div class="wrap footer__inner">
+      <p data-i18n="footerMain"></p>
+      <p class="footer__note" data-i18n="footerNote"></p>
+      <p class="footer__credit">
+        <span data-i18n="createdBy">Creado por</span>
+        <a href="https://web.gabotonatiu.com" target="_blank" rel="noopener">Gabriel Tonatiu Andrade</a>
+        · <span data-i18n="openSource">Código abierto (MIT) en</span>
+        <a id="repoLink" href="https://github.com/gabotonatiu/citefast" target="_blank" rel="noopener">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="assets/js/i18n.js" defer></script>
+  <script src="assets/js/engine.js" defer></script>
+  <script src="assets/js/api.js" defer></script>
+  <script src="assets/js/app.js" defer></script>
+</body>
+</html>
