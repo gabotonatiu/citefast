@@ -16,3 +16,4 @@ node_modules/
 
 # Internal strategy — keep private, do NOT publish
 PLANIFICACION.md
+_test/

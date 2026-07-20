@@ -301,5 +301,72 @@
       accessed: { 'date-parts': [[new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()]] } })];
   }
 
-  global.CiteAPI = { classify, resolve, MAILTO };
+  /* ==================================================================
+     BULK: extracción rigurosa de identificadores + resolución en lote.
+     Solo identificadores inequívocos (DOI, arXiv, PMID, ISBN). No se
+     "adivinan" citas a partir de texto libre.
+     ================================================================== */
+  function extractIdentifiers(text) {
+    const found = [];
+    const seen = new Set();
+    const push = (type, value, raw) => {
+      const k = type + ':' + String(value).toLowerCase();
+      if (!seen.has(k)) { seen.add(k); found.push({ type, value, raw: raw || value }); }
+    };
+    let m;
+
+    // DOI (excluye paréntesis/corchetes; limpia puntuación final)
+    (text.match(/10\.\d{4,9}\/[^\s"'<>()\[\]{}]+/g) || []).forEach((d) => {
+      d = d.replace(/[.,;:)\]}>]+$/, '');
+      if (d.length > 7) push('doi', d);
+    });
+
+    // arXiv → se mapea a su DOI oficial (10.48550/arXiv.ID)
+    const arx = /arxiv[:\s]+([a-z-]+\/\d{7}|\d{4}\.\d{4,5})(v\d+)?/gi;
+    while ((m = arx.exec(text))) push('doi', '10.48550/arXiv.' + m[1], 'arXiv:' + m[1]);
+
+    // PMID (requiere prefijo explícito para no capturar números sueltos)
+    const pmid = /pmid[:\s]+(\d{6,9})/gi;
+    while ((m = pmid.exec(text))) push('pmid', m[1], 'PMID: ' + m[1]);
+
+    // ISBN (requiere prefijo; valida longitud 10/13)
+    const isbn = /isbn(?:-1[03])?[:\s]+([\dX][\d\- –X]{8,16}[\dX])/gi;
+    while ((m = isbn.exec(text))) {
+      const v = m[1].replace(/[^\dX]/gi, '');
+      if (v.length === 10 || v.length === 13) push('isbn', v, 'ISBN ' + v);
+    }
+    return found;
+  }
+
+  async function resolveMany(ids, opts) {
+    opts = opts || {};
+    const concurrency = opts.concurrency || 4;
+    const signal = opts.signal;
+    const onProgress = opts.onProgress;
+    const results = new Array(ids.length);
+    let idx = 0, done = 0;
+
+    async function worker() {
+      while (idx < ids.length) {
+        const i = idx++;
+        const id = ids[i];
+        try {
+          let items = [];
+          if (id.type === 'doi') items = await resolveDOI(id.value, signal);
+          else if (id.type === 'pmid') items = await resolvePMID(id.value, signal);
+          else if (id.type === 'isbn') items = await resolveISBN(id.value, signal);
+          const ok = !!(items && items.length && items[0].title);
+          results[i] = { id, ok, item: ok ? items[0] : null, error: ok ? null : 'notfound' };
+        } catch (e) {
+          results[i] = { id, ok: false, item: null, error: e.name === 'AbortError' ? 'abort' : 'error' };
+        }
+        done++;
+        if (onProgress) onProgress(done, ids.length);
+      }
+    }
+    await Promise.all(Array.from({ length: Math.min(concurrency, ids.length || 1) }, worker));
+    return results;
+  }
+
+  global.CiteAPI = { classify, resolve, extractIdentifiers, resolveMany, MAILTO };
 })(window);

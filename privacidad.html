@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#4f46e5">
+  <title>Privacy Policy — CiteFast</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <style>
+    .legal { max-width: 760px; }
+    .legal h1 { font-size: clamp(26px, 4vw, 36px); letter-spacing: -.02em; margin: 8px 0 4px; }
+    .legal .updated { color: var(--text-mute); font-size: 13.5px; margin-bottom: 28px; }
+    .legal section { margin-bottom: 26px; }
+    .legal h2 { font-size: 19px; margin: 0 0 8px; letter-spacing: -.01em; }
+    .legal p, .legal li { color: var(--text-soft); font-size: 15px; line-height: 1.65; }
+    .legal ul { padding-left: 20px; }
+    .legal a { color: var(--accent); }
+    .legal .highlight { background: var(--ok-soft); border: 1px solid color-mix(in srgb, var(--ok) 28%, transparent); border-radius: var(--radius); padding: 14px 16px; color: var(--text); font-size: 14.5px; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar__inner">
+      <a class="brand" href="index.html">
+        <span class="brand__mark" aria-hidden="true">❝</span>
+        <span class="brand__name">Cite<b>Fast</b></span>
+      </a>
+      <div class="topbar__controls">
+        <label class="select">
+          <span class="select__label" data-i18n="langLabel">Idioma</span>
+          <select id="langSelect" aria-label="Language"></select>
+        </label>
+        <a class="btn btn--ghost btn--sm" href="index.html" id="backHome">← CiteFast</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap main legal" id="legal"></main>
+
+  <footer class="footer">
+    <div class="wrap footer__inner">
+      <p class="footer__credit">
+        <span data-i18n="createdBy">Creado por</span>
+        <a href="https://web.gabotonatiu.com" target="_blank" rel="noopener">Gabriel Tonatiu Andrade</a>
+        · <a href="index.html" data-i18n="backHome">CiteFast</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="assets/js/i18n.js" defer></script>
+  <script>
+  (function () {
+    'use strict';
+    const UPDATED = '2026-07-20';
+
+    const P = {
+      en: {
+        title: 'Privacy Policy', updated: 'Last updated: ' + UPDATED,
+        sections: [
+          ['Summary', '<div class="highlight">CiteFast runs <b>entirely in your browser</b>. We have no server and no user accounts. Your reference library never leaves your device, and we do not collect, store or sell your personal data.</div>'],
+          ['Data we collect', 'We do not collect personal data. The references you generate and save are stored only in your browser\'s local storage (on your own device) and are never transmitted to us. Clearing your browser data removes them.'],
+          ['Files you upload (bulk mode)', 'When you use bulk mode, any PDF, Word or text file you provide is read and processed <b>locally in your browser</b>. The file itself is never uploaded to any server. Only the identifiers found in it (DOI, arXiv, PMID, ISBN) are sent to the public academic APIs below to retrieve the citation data.'],
+          ['Third-party services', 'To autocomplete citations, the identifier or search terms you enter are sent to public bibliographic APIs: Crossref, OpenAlex, DOI.org, Google Books, Open Library and NCBI PubMed. These services have their own privacy policies. We share nothing else with them.'],
+          ['Advertising &amp; cookies', 'This site may display ads served by Google AdSense. Third-party vendors, including Google, use cookies to serve ads based on your prior visits to this and other websites. Google\'s use of advertising cookies enables it and its partners to serve ads to you. You can opt out of personalized advertising at <a href="https://adssettings.google.com" target="_blank" rel="noopener">Google Ads Settings</a>, and learn more at <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">Google\'s advertising policies</a>. Where required by law, you will be asked for consent before personalized ads are shown.'],
+          ['Your choices', 'You can clear your saved library at any time from the app, or by clearing your browser storage. You can opt out of personalized ads via the links above.'],
+          ['Children', 'CiteFast is a general-audience educational tool and is not directed to children under 13.'],
+          ['Changes &amp; contact', 'We may update this policy; the date above reflects the latest version. Questions? Contact us via <a href="https://web.gabotonatiu.com" target="_blank" rel="noopener">web.gabotonatiu.com</a>.'],
+        ],
+      },
+      es: {
+        title: 'Política de Privacidad', updated: 'Última actualización: ' + UPDATED,
+        sections: [
+          ['Resumen', '<div class="highlight">CiteFast funciona <b>por completo en tu navegador</b>. No tenemos servidor ni cuentas de usuario. Tu biblioteca de referencias nunca sale de tu dispositivo, y no recopilamos, almacenamos ni vendemos tus datos personales.</div>'],
+          ['Datos que recopilamos', 'No recopilamos datos personales. Las referencias que generas y guardas se almacenan solo en el almacenamiento local de tu navegador (en tu propio dispositivo) y nunca se nos transmiten. Si borras los datos de tu navegador, se eliminan.'],
+          ['Archivos que subes (modo por lotes)', 'Cuando usas el modo por lotes, cualquier archivo PDF, Word o de texto que proporciones se lee y procesa <b>localmente en tu navegador</b>. El archivo en sí nunca se sube a ningún servidor. Solo los identificadores encontrados (DOI, arXiv, PMID, ISBN) se envían a las APIs académicas públicas indicadas abajo para obtener los datos de la cita.'],
+          ['Servicios de terceros', 'Para autocompletar las citas, el identificador o los términos que introduces se envían a APIs bibliográficas públicas: Crossref, OpenAlex, DOI.org, Google Books, Open Library y NCBI PubMed. Estos servicios tienen sus propias políticas de privacidad. No compartimos nada más con ellos.'],
+          ['Publicidad y cookies', 'Este sitio puede mostrar anuncios servidos por Google AdSense. Proveedores externos, incluido Google, usan cookies para mostrar anuncios basados en tus visitas anteriores a este y otros sitios web. El uso de cookies de publicidad por parte de Google permite que él y sus socios te muestren anuncios. Puedes desactivar la publicidad personalizada en <a href="https://adssettings.google.com" target="_blank" rel="noopener">Configuración de anuncios de Google</a> y saber más en las <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">políticas de publicidad de Google</a>. Cuando la ley lo exija, se te pedirá consentimiento antes de mostrar anuncios personalizados.'],
+          ['Tus opciones', 'Puedes vaciar tu biblioteca guardada en cualquier momento desde la aplicación, o borrando el almacenamiento de tu navegador. Puedes desactivar los anuncios personalizados mediante los enlaces de arriba.'],
+          ['Menores', 'CiteFast es una herramienta educativa de público general y no está dirigida a menores de 13 años.'],
+          ['Cambios y contacto', 'Podemos actualizar esta política; la fecha de arriba refleja la última versión. ¿Preguntas? Contáctanos vía <a href="https://web.gabotonatiu.com" target="_blank" rel="noopener">web.gabotonatiu.com</a>.'],
+        ],
+      },
+      pt: {
+        title: 'Política de Privacidade', updated: 'Última atualização: ' + UPDATED,
+        sections: [
+          ['Resumo', '<div class="highlight">O CiteFast funciona <b>inteiramente no seu navegador</b>. Não temos servidor nem contas de usuário. Sua biblioteca de referências nunca sai do seu dispositivo, e não coletamos, armazenamos nem vendemos seus dados pessoais.</div>'],
+          ['Dados que coletamos', 'Não coletamos dados pessoais. As referências que você gera e salva ficam apenas no armazenamento local do seu navegador (no seu próprio dispositivo) e nunca são transmitidas para nós. Limpar os dados do navegador as remove.'],
+          ['Arquivos que você envia (modo em lote)', 'Ao usar o modo em lote, qualquer arquivo PDF, Word ou de texto é lido e processado <b>localmente no seu navegador</b>. O arquivo em si nunca é enviado a nenhum servidor. Apenas os identificadores encontrados (DOI, arXiv, PMID, ISBN) são enviados às APIs acadêmicas públicas abaixo para obter os dados da citação.'],
+          ['Serviços de terceiros', 'Para autocompletar as citações, o identificador ou os termos que você digita são enviados a APIs bibliográficas públicas: Crossref, OpenAlex, DOI.org, Google Books, Open Library e NCBI PubMed. Esses serviços têm suas próprias políticas de privacidade. Não compartilhamos nada além disso.'],
+          ['Publicidade e cookies', 'Este site pode exibir anúncios do Google AdSense. Fornecedores terceiros, incluindo o Google, usam cookies para exibir anúncios com base nas suas visitas anteriores a este e a outros sites. Você pode desativar a publicidade personalizada em <a href="https://adssettings.google.com" target="_blank" rel="noopener">Configurações de anúncios do Google</a> e saber mais nas <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">políticas de publicidade do Google</a>. Quando exigido por lei, seu consentimento será solicitado antes de exibir anúncios personalizados.'],
+          ['Suas opções', 'Você pode esvaziar a biblioteca salva a qualquer momento no aplicativo, ou limpando o armazenamento do navegador. Pode desativar anúncios personalizados pelos links acima.'],
+          ['Crianças', 'O CiteFast é uma ferramenta educacional de público geral e não é direcionado a menores de 13 anos.'],
+          ['Alterações e contato', 'Podemos atualizar esta política; a data acima reflete a versão mais recente. Dúvidas? Contate-nos em <a href="https://web.gabotonatiu.com" target="_blank" rel="noopener">web.gabotonatiu.com</a>.'],
+        ],
+      },
+      fr: {
+        title: 'Politique de confidentialité', updated: 'Dernière mise à jour : ' + UPDATED,
+        sections: [
+          ['Résumé', '<div class="highlight">CiteFast fonctionne <b>entièrement dans votre navigateur</b>. Nous n\'avons ni serveur ni comptes utilisateurs. Votre bibliothèque de références ne quitte jamais votre appareil, et nous ne collectons, ne stockons ni ne vendons vos données personnelles.</div>'],
+          ['Données que nous collectons', 'Nous ne collectons pas de données personnelles. Les références que vous générez et enregistrez sont stockées uniquement dans le stockage local de votre navigateur (sur votre appareil) et ne nous sont jamais transmises. Effacer les données de votre navigateur les supprime.'],
+          ['Fichiers que vous importez (mode par lot)', 'Lorsque vous utilisez le mode par lot, tout fichier PDF, Word ou texte est lu et traité <b>localement dans votre navigateur</b>. Le fichier lui-même n\'est jamais téléversé. Seuls les identifiants trouvés (DOI, arXiv, PMID, ISBN) sont envoyés aux API académiques publiques ci-dessous pour récupérer les données de la citation.'],
+          ['Services tiers', 'Pour compléter les citations, l\'identifiant ou les termes saisis sont envoyés à des API bibliographiques publiques : Crossref, OpenAlex, DOI.org, Google Books, Open Library et NCBI PubMed. Ces services ont leurs propres politiques de confidentialité. Nous ne partageons rien d\'autre.'],
+          ['Publicité et cookies', 'Ce site peut afficher des annonces diffusées par Google AdSense. Des fournisseurs tiers, dont Google, utilisent des cookies pour diffuser des annonces basées sur vos visites antérieures. Vous pouvez désactiver la publicité personnalisée dans les <a href="https://adssettings.google.com" target="_blank" rel="noopener">paramètres des annonces Google</a> et en savoir plus via les <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">règles publicitaires de Google</a>. Lorsque la loi l\'exige, votre consentement sera demandé avant l\'affichage d\'annonces personnalisées.'],
+          ['Vos choix', 'Vous pouvez vider votre bibliothèque à tout moment depuis l\'application ou en effaçant le stockage du navigateur. Vous pouvez désactiver les annonces personnalisées via les liens ci-dessus.'],
+          ['Enfants', 'CiteFast est un outil éducatif grand public et ne s\'adresse pas aux enfants de moins de 13 ans.'],
+          ['Modifications et contact', 'Nous pouvons mettre à jour cette politique ; la date ci-dessus indique la dernière version. Des questions ? Contactez-nous via <a href="https://web.gabotonatiu.com" target="_blank" rel="noopener">web.gabotonatiu.com</a>.'],
+        ],
+      },
+      de: {
+        title: 'Datenschutzerklärung', updated: 'Zuletzt aktualisiert: ' + UPDATED,
+        sections: [
+          ['Zusammenfassung', '<div class="highlight">CiteFast läuft <b>vollständig in deinem Browser</b>. Wir haben keinen Server und keine Benutzerkonten. Deine Referenzbibliothek verlässt nie dein Gerät, und wir erheben, speichern oder verkaufen keine personenbezogenen Daten.</div>'],
+          ['Daten, die wir erheben', 'Wir erheben keine personenbezogenen Daten. Die von dir erstellten und gespeicherten Quellen werden nur im lokalen Speicher deines Browsers (auf deinem Gerät) gespeichert und nie an uns übertragen. Das Löschen der Browserdaten entfernt sie.'],
+          ['Dateien, die du hochlädst (Stapelmodus)', 'Im Stapelmodus wird jede PDF-, Word- oder Textdatei <b>lokal in deinem Browser</b> gelesen und verarbeitet. Die Datei selbst wird nie auf einen Server hochgeladen. Nur die gefundenen Identifikatoren (DOI, arXiv, PMID, ISBN) werden an die unten genannten öffentlichen akademischen APIs gesendet, um die Zitatdaten abzurufen.'],
+          ['Drittanbieterdienste', 'Zum Vervollständigen der Zitate werden der eingegebene Identifikator oder die Suchbegriffe an öffentliche bibliografische APIs gesendet: Crossref, OpenAlex, DOI.org, Google Books, Open Library und NCBI PubMed. Diese Dienste haben eigene Datenschutzerklärungen. Wir teilen sonst nichts mit ihnen.'],
+          ['Werbung &amp; Cookies', 'Diese Website kann von Google AdSense ausgelieferte Anzeigen zeigen. Drittanbieter, einschließlich Google, verwenden Cookies, um Anzeigen basierend auf deinen früheren Besuchen zu schalten. Du kannst personalisierte Werbung in den <a href="https://adssettings.google.com" target="_blank" rel="noopener">Google-Anzeigeneinstellungen</a> deaktivieren und mehr in den <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">Werberichtlinien von Google</a> erfahren. Wo gesetzlich vorgeschrieben, wirst du vor personalisierter Werbung um Einwilligung gebeten.'],
+          ['Deine Wahlmöglichkeiten', 'Du kannst deine gespeicherte Bibliothek jederzeit in der App oder durch Löschen des Browserspeichers leeren. Personalisierte Werbung kannst du über die obigen Links deaktivieren.'],
+          ['Kinder', 'CiteFast ist ein Bildungswerkzeug für ein allgemeines Publikum und richtet sich nicht an Kinder unter 13 Jahren.'],
+          ['Änderungen &amp; Kontakt', 'Wir können diese Erklärung aktualisieren; das obige Datum zeigt die neueste Version. Fragen? Kontaktiere uns über <a href="https://web.gabotonatiu.com" target="_blank" rel="noopener">web.gabotonatiu.com</a>.'],
+        ],
+      },
+    };
+
+    function lang() {
+      const s = localStorage.getItem('citefast.lang.v1');
+      if (s && P[s]) return s;
+      const n = (navigator.language || 'en').slice(0, 2).toLowerCase();
+      return P[n] ? n : 'en';
+    }
+
+    function render(l) {
+      document.documentElement.lang = l;
+      const d = P[l] || P.en;
+      const main = document.getElementById('legal');
+      main.innerHTML = `<h1>${d.title}</h1><p class="updated">${d.updated}</p>` +
+        d.sections.map((s) => `<section><h2>${s[0]}</h2>${/^<div/.test(s[1]) ? s[1] : '<p>' + s[1] + '</p>'}</section>`).join('');
+      // Textos compartidos de la barra/pie (usa i18n.js si está cargado)
+      if (window.I18N && window.I18N[l]) {
+        document.querySelectorAll('[data-i18n]').forEach((el) => { el.innerHTML = window.I18N[l][el.dataset.i18n] || el.innerHTML; });
+      }
+      document.getElementById('backHome').textContent = '← CiteFast';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const sel = document.getElementById('langSelect');
+      ['en', 'es', 'pt', 'fr', 'de'].forEach((code) => {
+        const o = document.createElement('option');
+        o.value = code; o.textContent = (window.I18N && window.I18N[code] ? window.I18N[code]._name : code);
+        sel.appendChild(o);
+      });
+      let cur = lang();
+      sel.value = cur;
+      render(cur);
+      sel.addEventListener('change', () => {
+        cur = sel.value;
+        localStorage.setItem('citefast.lang.v1', cur);
+        render(cur);
+      });
+    });
+  })();
+  </script>
+</body>
+</html>

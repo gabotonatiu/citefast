@@ -11,6 +11,7 @@
   const LS_STYLE = 'citefast.style.v1';
   const LS_THEME = 'citefast.theme.v1';
   const LS_LANG = 'citefast.lang.v1';
+  const LS_LANGSEEN = 'citefast.langchosen.v1';
 
   const MANUAL_TYPES = ['article-journal', 'book', 'chapter', 'paper-conference', 'thesis', 'report', 'webpage', 'dataset'];
 
@@ -22,6 +23,9 @@
     library: load(LS_LIB, []),
     abort: null,
     debounce: null,
+    bulkFile: null,
+    bulkResolved: [],
+    bulkAbort: null,
   };
 
   /* -------------------------------------------------------- i18n helpers */
@@ -96,9 +100,163 @@
       }
     });
 
+    // Modo por lotes (bulk)
+    $('#bulkOpen').addEventListener('click', openBulk);
+    $$('[data-bulk-close]').forEach((el) => el.addEventListener('click', closeBulk));
+    $('#bulkFile').addEventListener('change', (e) => {
+      state.bulkFile = e.target.files[0] || null;
+      $('#bulkFileName').textContent = state.bulkFile ? state.bulkFile.name : '';
+    });
+    $('#bulkAnalyze').addEventListener('click', runBulk);
+    $('#bulkAddAll').addEventListener('click', bulkAddAll);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') { closeBulk(); }
+    });
+
     applyI18n();
-    input.focus();
+
+    // Modal de idioma: solo la PRIMERA visita.
+    if (!localStorage.getItem(LS_LANGSEEN)) showLangModal();
+    else input.focus();
   }
+
+  /* ------------------------------------------------ modal de idioma -----*/
+  function showLangModal() {
+    const grid = $('#langModalGrid');
+    grid.innerHTML = '';
+    window.I18N_ORDER.forEach((code) => {
+      const btn = document.createElement('button');
+      btn.className = 'langgrid__btn' + (code === state.lang ? ' is-current' : '');
+      btn.type = 'button';
+      btn.innerHTML = `<span class="langgrid__name">${esc(window.I18N[code]._name)}</span>`;
+      btn.addEventListener('click', () => {
+        state.lang = code;
+        localStorage.setItem(LS_LANG, code);
+        localStorage.setItem(LS_LANGSEEN, '1');
+        $('#langSelect').value = code;
+        applyI18n();
+        hideModal($('#langModal'));
+        $('#heroInput').focus();
+      });
+      grid.appendChild(btn);
+    });
+    showModal($('#langModal'));
+  }
+
+  /* --------------------------------------------------- modo por lotes ---*/
+  function openBulk() { showModal($('#bulkModal')); $('#bulkInput').focus(); }
+  function closeBulk() {
+    if (state.bulkAbort) { state.bulkAbort.abort(); state.bulkAbort = null; }
+    hideModal($('#bulkModal'));
+  }
+
+  async function runBulk() {
+    const pasted = $('#bulkInput').value.trim();
+    const file = state.bulkFile;
+    if (!pasted && !file) return;
+    $('#bulkResults').innerHTML = '';
+    $('#bulkFooter').hidden = true;
+    state.bulkResolved = [];
+    setBulkStatus('loading', t('bulkReading'));
+
+    try {
+      let text = pasted;
+      if (file) {
+        const extracted = await window.CiteBulk.extractText(file, (p, total) =>
+          setBulkStatus('loading', `${t('bulkReading')} ${p}/${total}`));
+        text = pasted ? pasted + '\n' + extracted : extracted;
+      }
+      const ids = window.CiteAPI.extractIdentifiers(text || '');
+
+      if (!ids.length) {
+        setBulkStatus('empty', t('bulkNone'));
+        renderSkipNote();
+        return;
+      }
+      setBulkStatus('loading', t('bulkResolving').replace('%n', ids.length));
+      state.bulkAbort = new AbortController();
+      const results = await window.CiteAPI.resolveMany(ids, {
+        concurrency: 4, signal: state.bulkAbort.signal,
+        onProgress: (d, total) => setBulkStatus('loading', t('bulkResolving').replace('%n', `${d}/${total}`)),
+      });
+      renderBulkResults(results);
+    } catch (e) {
+      if (e && e.message === 'nodecompress') setBulkStatus('error', t('bulkDocxUnsupported'));
+      else setBulkStatus('error', t('bulkErr'));
+    }
+  }
+
+  function setBulkStatus(kind, msg) {
+    const el = $('#bulkStatus');
+    el.hidden = false;
+    el.className = 'bulk__status bulk__status--' + kind;
+    el.innerHTML = kind === 'loading' ? `<span class="spinner" aria-hidden="true"></span> ${esc(msg)}` : esc(msg);
+  }
+
+  function renderBulkResults(results) {
+    const resolved = results.filter((r) => r.ok);
+    const failed = results.filter((r) => !r.ok && r.error !== 'abort');
+    state.bulkResolved = resolved.map((r) => r.item);
+
+    setBulkStatus('ok', t('bulkFound').replace('%n', resolved.length));
+
+    const box = $('#bulkResults');
+    box.innerHTML = '';
+
+    resolved.forEach((r, idx) => {
+      const row = document.createElement('label');
+      row.className = 'bulkrow';
+      row.innerHTML =
+        `<input type="checkbox" class="bulkrow__chk" data-idx="${idx}" checked>
+         <span class="bulkrow__cite">${fmt(r.item).html}</span>`;
+      box.appendChild(row);
+    });
+
+    failed.forEach((r) => {
+      const row = document.createElement('div');
+      row.className = 'bulkrow bulkrow--fail';
+      row.innerHTML = `<span class="bulkrow__x" aria-hidden="true">⚠</span>
+        <span class="bulkrow__cite"><code>${esc(r.id.raw || r.id.value)}</code> — ${esc(t('bulkFailed'))}</span>`;
+      box.appendChild(row);
+    });
+
+    renderSkipNote();
+
+    const footer = $('#bulkFooter');
+    if (resolved.length) {
+      footer.hidden = false;
+      $('#bulkAddAll').textContent = t('bulkAddAll').replace('%n', resolved.length);
+    } else { footer.hidden = true; }
+  }
+
+  // Aviso honesto (sin número inventado): lo no identificable no se genera.
+  function renderSkipNote() {
+    const note = document.createElement('div');
+    note.className = 'bulkrow bulkrow--note';
+    note.innerHTML = `<span aria-hidden="true">✋</span> <span>${esc(t('bulkUnverifiable'))}</span>`;
+    $('#bulkResults').appendChild(note);
+  }
+
+  function bulkAddAll() {
+    const checks = $$('#bulkResults .bulkrow__chk');
+    let added = 0;
+    checks.forEach((chk) => {
+      if (!chk.checked) return;
+      const item = state.bulkResolved[parseInt(chk.dataset.idx, 10)];
+      if (!item) return;
+      if (state.library.some((x) => libKey(x) === libKey(item))) return;
+      state.library.unshift(Object.assign({ _id: uid() }, item));
+      added++;
+    });
+    if (added) { save(LS_LIB, state.library); renderLibrary(); }
+    closeBulk();
+    $('#bulkInput').value = ''; state.bulkFile = null; $('#bulkFileName').textContent = '';
+    document.querySelector('.lib').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  /* -------------------------------------------------------- modales -----*/
+  function showModal(el) { el.hidden = false; document.body.style.overflow = 'hidden'; }
+  function hideModal(el) { el.hidden = true; document.body.style.overflow = ''; }
 
   /* ------------------------------------------------- aplicar traducción */
   function applyI18n() {

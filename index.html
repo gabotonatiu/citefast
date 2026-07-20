@@ -61,6 +61,15 @@
         <span id="status" class="status status--idle"></span>
       </div>
 
+      <p class="trust" id="trustLine">
+        <span class="trust__dot" aria-hidden="true">🔒</span>
+        <span data-i18n="trustLine"></span>
+      </p>
+
+      <div class="hero__cta">
+        <button id="bulkOpen" class="btn btn--ghost btn--bulk" data-i18n="bulkBtn">⚡ Bulk mode</button>
+      </div>
+
       <!-- Candidatos (desambiguación) -->
       <div id="candidates" class="candidates" hidden></div>
 
@@ -156,13 +165,57 @@
         <a href="https://web.gabotonatiu.com" target="_blank" rel="noopener">Gabriel Tonatiu Andrade</a>
         · <span data-i18n="openSource">Código abierto (MIT) en</span>
         <a id="repoLink" href="https://github.com/gabotonatiu/citefast" target="_blank" rel="noopener">GitHub</a>
+        · <a href="privacidad.html" data-i18n="privacyLink">Privacidad</a>
       </p>
     </div>
   </footer>
 
+  <!-- ░░░ MODAL: selección de idioma (solo primera visita) ░░░ -->
+  <div id="langModal" class="modal" hidden>
+    <div class="modal__backdrop"></div>
+    <div class="modal__box modal__box--lang" role="dialog" aria-modal="true" aria-labelledby="langModalTitle">
+      <div class="modal__logo" aria-hidden="true">❝</div>
+      <h2 id="langModalTitle" data-i18n="langModalTitle">Choose your language</h2>
+      <p class="modal__sub" data-i18n="langModalSub"></p>
+      <div id="langModalGrid" class="langgrid"></div>
+    </div>
+  </div>
+
+  <!-- ░░░ MODAL: generador por lotes (bulk) ░░░ -->
+  <div id="bulkModal" class="modal" hidden>
+    <div class="modal__backdrop" data-bulk-close></div>
+    <div class="modal__box modal__box--bulk" role="dialog" aria-modal="true" aria-labelledby="bulkTitle">
+      <button class="modal__x" data-bulk-close aria-label="Close">✕</button>
+      <h2 id="bulkTitle" data-i18n="bulkTitle">Bulk mode</h2>
+      <p class="modal__sub" data-i18n="bulkSub"></p>
+
+      <p class="bulk__privacy" data-i18n="bulkPrivacy"></p>
+
+      <textarea id="bulkInput" class="bulk__input" rows="6" data-i18n-ph="bulkPastePh"></textarea>
+
+      <div class="bulk__controls">
+        <label class="btn btn--ghost bulk__file">
+          <span data-i18n="bulkChoose">Choose file</span>
+          <input id="bulkFile" type="file" accept=".pdf,.docx,.txt,.md,.bib,.ris,.csv" hidden>
+        </label>
+        <span id="bulkFileName" class="bulk__filename"></span>
+        <button id="bulkAnalyze" class="btn btn--primary" data-i18n="bulkAnalyze">Extract &amp; generate</button>
+      </div>
+
+      <p class="bulk__rigor"><span aria-hidden="true">🔬</span> <span data-i18n="bulkRigor"></span></p>
+
+      <div id="bulkStatus" class="bulk__status" hidden></div>
+      <div id="bulkResults" class="bulk__results"></div>
+      <div id="bulkFooter" class="bulk__footer" hidden>
+        <button id="bulkAddAll" class="btn btn--accent"></button>
+      </div>
+    </div>
+  </div>
+
   <script src="assets/js/i18n.js" defer></script>
   <script src="assets/js/engine.js" defer></script>
   <script src="assets/js/api.js" defer></script>
+  <script src="assets/js/bulk.js" defer></script>
   <script src="assets/js/app.js" defer></script>
 </body>
 </html>
