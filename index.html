@@ -3,9 +3,57 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Generador y optimizador de citas académicas gratis. Pega un DOI, ISBN, URL o título y obtén tu cita en APA 7, MLA, Chicago, IEEE, Vancouver o ABNT al instante. Sin registro.">
+  <meta name="description" content="Generador y optimizador de citas académicas gratis. Pega un DOI, ISBN, URL o título y obtén tu cita en APA 7, MLA, Chicago, IEEE, Vancouver o ABNT al instante. 100% privado, sin registro.">
   <meta name="theme-color" content="#4f46e5">
+  <meta name="author" content="Gabriel Tonatiu Andrade">
+  <meta name="robots" content="index, follow, max-image-preview:large">
   <title>CiteFast — Generador de Citas Académicas (APA, MLA, IEEE, Vancouver, ABNT)</title>
+  <link rel="canonical" href="https://citefast.app/">
+
+  <!-- Open Graph (cómo se ve al compartir) -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CiteFast">
+  <meta property="og:title" content="CiteFast — Generador de Citas Académicas gratis y privado">
+  <meta property="og:description" content="Pega un DOI, ISBN, URL o título y obtén tu cita en APA, MLA, Chicago, IEEE, Vancouver o ABNT al instante. 100% en tu navegador, sin registro.">
+  <meta property="og:url" content="https://citefast.app/">
+  <meta property="og:image" content="https://citefast.app/assets/og-image.svg">
+  <meta property="og:locale" content="es_ES">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:locale:alternate" content="pt_BR">
+  <meta property="og:locale:alternate" content="fr_FR">
+  <meta property="og:locale:alternate" content="de_DE">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CiteFast — Generador de Citas Académicas gratis y privado">
+  <meta name="twitter:description" content="Cita en APA, MLA, Chicago, IEEE, Vancouver o ABNT al instante. 100% en tu navegador, sin registro.">
+  <meta name="twitter:image" content="https://citefast.app/assets/og-image.svg">
+
+  <!-- Iconos / PWA -->
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/favicon.svg">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- Datos estructurados: aplicación web -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "CiteFast",
+    "url": "https://citefast.app/",
+    "description": "Generador y optimizador de citas académicas gratis en APA 7, MLA 9, Chicago, IEEE, Vancouver y ABNT. 100% en el navegador, sin registro ni backend.",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "Any (web browser)",
+    "inLanguage": ["es", "en", "pt", "fr", "de"],
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "featureList": [
+      "APA 7, MLA 9, Chicago, IEEE, Vancouver, ABNT",
+      "Autocompletado por DOI, ISBN, URL o título",
+      "Generación por lotes desde PDF/Word/texto",
+      "Exportación a BibTeX, RIS y CSL-JSON"
+    ],
+    "author": { "@type": "Person", "name": "Gabriel Tonatiu Andrade", "url": "https://web.gabotonatiu.com" },
+    "isAccessibleForFree": true
+  }
+  </script>
 
   <!-- Preconexión a las APIs para reducir latencia del autocompletado -->
   <link rel="preconnect" href="https://doi.org" crossorigin>

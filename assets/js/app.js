@@ -592,6 +592,24 @@
       d.styleGuide.map((r) => `<tr><td><b>${esc(r.s)}</b></td><td>${esc(r.f)}</td></tr>`).join('') + '</tbody></table>';
     $('#faqList').innerHTML = d.faq.map((it) =>
       `<details class="faq__item"><summary>${esc(it.q)}</summary><div class="faq__a">${it.a}</div></details>`).join('');
+    injectFaqJsonLd(d.faq);
+  }
+
+  // Datos estructurados FAQPage (rich results) en el idioma activo.
+  function injectFaqJsonLd(faq) {
+    const stripTags = (s) => String(s).replace(/<[^>]+>/g, '');
+    const data = {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faq.map((it) => ({
+        '@type': 'Question',
+        name: stripTags(it.q),
+        acceptedAnswer: { '@type': 'Answer', text: stripTags(it.a) },
+      })),
+    };
+    let el = document.getElementById('faqLd');
+    if (!el) { el = document.createElement('script'); el.type = 'application/ld+json'; el.id = 'faqLd'; document.head.appendChild(el); }
+    el.textContent = JSON.stringify(data);
   }
 
   /* ---------------------------------------------------------- helpers ----*/
