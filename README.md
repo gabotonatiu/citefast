@@ -44,17 +44,7 @@ python -m http.server 3000
 # open http://127.0.0.1:3000
 ```
 
-## Deploy (Cloudflare Pages)
-
-1. Connect this repo in Cloudflare Pages (or use *Direct Upload*).
-2. **Build command:** none · **Output directory:** `/` (root).
-3. Deploy. It's fully static — no build, no functions required.
-
 > Set `MAILTO` in `assets/js/api.js` to your real email to join Crossref/OpenAlex's *polite pool* (better rate limits).
-
-## Ads (optional)
-
-Ad slots are pre-wired with **reserved height so they never cause layout shift (CLS = 0)**. To enable Google AdSense, add your publisher script in `<head>` and uncomment the `<ins>` block inside `<div class="ad__box">` (both marked in `index.html`), then fill in your `ca-pub-…` id.
 
 ## Supported styles & languages
 
