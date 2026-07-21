@@ -74,6 +74,8 @@
 }
 
 * { box-sizing: border-box; }
+/* El atributo [hidden] debe ganar siempre, aunque una clase fije display. */
+[hidden] { display: none !important; }
 html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;

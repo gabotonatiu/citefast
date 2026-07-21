@@ -3,6 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    /* Dominio canónico: si alguien llega por *.pages.dev, se le redirige a citefast.app */
+    if (location.hostname.endsWith('.pages.dev')) {
+      location.replace('https://citefast.app' + location.pathname + location.search + location.hash);
+    }
+  </script>
   <meta name="description" content="Generador y optimizador de citas académicas gratis. Pega un DOI, ISBN, URL o título y obtén tu cita en APA 7, MLA, Chicago, IEEE, Vancouver o ABNT al instante. 100% privado, sin registro.">
   <meta name="theme-color" content="#4f46e5">
   <meta name="author" content="Gabriel Tonatiu Andrade">
